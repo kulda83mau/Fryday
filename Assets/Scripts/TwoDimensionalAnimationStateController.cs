@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TwoDimensionalAnimationStateController : MonoBehaviour
 {
-    Animator animator;
+    [SerializeField] private Animator animator;
     Transform characterTransform;
     
     float velocityZ = 0.0f;
@@ -16,6 +16,16 @@ public class TwoDimensionalAnimationStateController : MonoBehaviour
     public float walkSpeed = 1.0f;
     public float runSpeed = 3.0f;
 
+    public Camera playerCamera;
+    public float lookSpeed = 2f;
+    public float lookXLimit = 45f;
+
+    private Vector3 moveDirection = Vector3.zero;
+    private float rotationX = 0;
+    private CharacterController characterController;
+
+    private bool canMove = true;
+
     int VelocityZHash;
     int VelocityXHash;
 
@@ -24,10 +34,12 @@ public class TwoDimensionalAnimationStateController : MonoBehaviour
     
     void Start()
     {
-        animator = GetComponent<Animator>();
+        
         characterTransform = GetComponent<Transform>();
         VelocityXHash = Animator.StringToHash("Velocity X");
         VelocityZHash = Animator.StringToHash("Velocity Z");
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     void changeVelocity(bool backPressed,bool forwardPressed, bool leftPressed, bool rightPressed,bool runPressed, float currentMaxVelocity)
     {
@@ -160,11 +172,16 @@ public class TwoDimensionalAnimationStateController : MonoBehaviour
 
         movementDirection = new Vector3(velocityX, 0, velocityZ).normalized;
 
-        
+        if (canMove)
+        {
+            rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
+            rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
+            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+        }
+
         transform.Translate(movementDirection * Time.deltaTime * currentSpeed);
         animator.SetFloat(VelocityZHash, velocityZ);
         animator.SetFloat(VelocityXHash, velocityX);
-
-       
     }
 }
