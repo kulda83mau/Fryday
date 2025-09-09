@@ -10,7 +10,16 @@ public class Player : NetworkBehaviour
     {
         DontDestroyOnLoad(this);
         transform.position = new Vector3(netId * 2, 0);
-        if (!isLocalPlayer) Destroy(GetComponent<TwoDimensionalAnimationStateController>());
+        if (!isLocalPlayer)
+        {
+            Debug.Log("NOT A LOCAL PLAYER");
+            Destroy(GetComponentInChildren<Camera>());
+            Destroy(GetComponentInChildren<AudioListener>());
+            Destroy(GetComponent<TwoDimensionalAnimationStateController>());
+        } else
+        {
+            Debug.Log("LOCAL PLAYER");
+        }
     }
 
     // Update is called once per frame
