@@ -76,7 +76,6 @@ public class SteamLobby : MonoBehaviour
         LobbyId = new CSteamID(callback.m_ulSteamIDLobby);
 
         networkManager.StartHost();
-        networkManager.ServerChangeScene("GameScene");
 
         SteamMatchmaking.SetLobbyData(LobbyId, HostCSteamIDKey, SteamUser.GetSteamID().ToString());
         SteamMatchmaking.SetLobbyData(LobbyId, GameKey, GameID);
