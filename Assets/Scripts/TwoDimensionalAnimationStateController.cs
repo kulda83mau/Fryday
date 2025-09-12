@@ -325,4 +325,5 @@ public class TwoDimensionalAnimationStateController : MonoBehaviour
             animator.SetFloat(VelocityXHash, velocityX);
         }
     }
+
 }
